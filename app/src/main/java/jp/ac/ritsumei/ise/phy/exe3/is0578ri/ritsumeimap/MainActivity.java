@@ -11,7 +11,9 @@ import com.nifcloud.mbaas.core.NCMBQuery;
 
 import androidx.appcompat.app.AppCompatActivity;
 
+import android.content.Intent;
 import android.os.Bundle;
+import android.view.View;
 import android.widget.TextView;
 
 import java.util.ArrayList;
@@ -40,7 +42,7 @@ public class MainActivity extends AppCompatActivity
         NCMBObject obj = new NCMBObject("TestClass");
 
         // オブジェクトの値を設定
-        try
+        /*try
         {
             obj.put("datalist", Arrays.asList("date", "name", "place", "message"));
         }
@@ -68,9 +70,9 @@ public class MainActivity extends AppCompatActivity
                     putText.setText("save process success");
                 }
             }
-        });
+        });*/
 
-        NCMBQuery<NCMBObject> query = new NCMBQuery<>("TestClass");
+        /*NCMBQuery<NCMBObject> query = new NCMBQuery<>("TestClass");
         query.whereEqualTo("message", "Hello, NCMB!");
         List<NCMBObject> result = null;
         try
@@ -108,6 +110,12 @@ public class MainActivity extends AppCompatActivity
         catch (NCMBException e)
         {
             e.printStackTrace();
-        }
+        }*/
+    }
+
+    public void OnButtonDown(View view)
+    {
+        Intent intent = new Intent(getApplication(), MapsActivity.class);
+        startActivity(intent);
     }
 }
