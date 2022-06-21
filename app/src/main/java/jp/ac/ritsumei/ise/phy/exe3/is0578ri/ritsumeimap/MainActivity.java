@@ -1,15 +1,22 @@
 package jp.ac.ritsumei.ise.phy.exe3.is0578ri.ritsumeimap;
 
 import com.nifcloud.mbaas.core.FetchCallback;
+import com.nifcloud.mbaas.core.FindCallback;
 import com.nifcloud.mbaas.core.NCMB;
 import com.nifcloud.mbaas.core.NCMBBase;
 import com.nifcloud.mbaas.core.NCMBException;
 import com.nifcloud.mbaas.core.NCMBObject;
 import com.nifcloud.mbaas.core.DoneCallback;
+import com.nifcloud.mbaas.core.NCMBQuery;
+
 import androidx.appcompat.app.AppCompatActivity;
 
 import android.os.Bundle;
 import android.widget.TextView;
+
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.List;
 
 public class MainActivity extends AppCompatActivity
 {
@@ -35,7 +42,7 @@ public class MainActivity extends AppCompatActivity
         // オブジェクトの値を設定
         try
         {
-            obj.put("message", "I am Japanese.");
+            obj.put("datalist", Arrays.asList("date", "name", "place", "message"));
         }
         catch (NCMBException e)
         {
@@ -63,31 +70,44 @@ public class MainActivity extends AppCompatActivity
             }
         });
 
+        NCMBQuery<NCMBObject> query = new NCMBQuery<>("TestClass");
+        query.whereEqualTo("message", "Hello, NCMB!");
+        List<NCMBObject> result = null;
         try
         {
-            obj.setObjectId("getTestObjectId");
+            result = query.find();
+        }
+        catch (NCMBException e)
+        {
+            getText.setText("Searching Object Failed");
+            e.printStackTrace();
+        }
+
+        try
+        {
+            obj.setObjectId(result.get(0).getObjectId());
+
+            obj.fetchInBackground(new FetchCallback()
+            {
+                @Override
+                public void done(NCMBBase object, NCMBException e)
+                {
+                    if (e != null)
+                    {
+                        //System.out.println("Getting Object Failed");
+                        getText.setText("Getting Object Failed");
+                    }
+                    else
+                    {
+                        //System.out.println("Getting Object Succeed");
+                        getText.setText(obj.getString("message"));
+                    }
+                }
+            });
         }
         catch (NCMBException e)
         {
             e.printStackTrace();
         }
-
-        obj.fetchInBackground(new FetchCallback()
-        {
-            @Override
-            public void done(NCMBBase object, NCMBException e)
-            {
-                if (e != null)
-                {
-                    //System.out.println("Getting Object Failed");
-                    getText.setText("Getting Object Failed");
-                }
-                else
-                {
-                    //System.out.println("Getting Object Succeed");
-                    getText.setText("Getting Object Succeed");
-                }
-            }
-        });
     }
 }
