@@ -50,28 +50,34 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
         mMap = googleMap;
         // Add a marker in Sydney and move the camera
         LatLng bkc = new LatLng(34.981984561994466, 135.9623099219572);
-        mMap.addMarker(new MarkerOptions().position(bkc).title("Marker in BKC").snippet("補足"));
+        //mMap.addMarker(new MarkerOptions().position(bkc).title("Marker in BKC").snippet("補足"));
         mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(bkc, 16));
 
-        mMap.setOnMapClickListener(new GoogleMap.OnMapClickListener() {
+        mMap.setOnMapClickListener(new GoogleMap.OnMapClickListener()
+        {
             @Override
-            public void onMapClick(LatLng tapLocation) {
+            public void onMapClick(LatLng tapLocation)
+            {
                 LatLng location;
                 location = new LatLng(tapLocation.latitude, tapLocation.longitude);
                 String str = String.format(Locale.US, "%f, %f", tapLocation.latitude, tapLocation.longitude);
-                mMap.addMarker(new MarkerOptions().position(location).title(str).snippet("TapTest"));
+                //mMap.addMarker(new MarkerOptions().position(location).title(str).snippet("TapTest"));
                 mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(location, 16));
             }
         });
 
-        mMap.setOnMapLongClickListener(new GoogleMap.OnMapLongClickListener(){
+        mMap.setOnMapLongClickListener(new GoogleMap.OnMapLongClickListener()
+        {
             @Override
-            public void onMapLongClick(LatLng longTapLocation){
+            public void onMapLongClick(LatLng longTapLocation)
+            {
                 LatLng newLocation = new LatLng(longTapLocation.latitude, longTapLocation.longitude);
                 mMap.addMarker(new MarkerOptions().position(newLocation)
-                        .title("" + longTapLocation.latitude + " :" + longTapLocation.longitude)
-                        .icon(BitmapDescriptorFactory.fromResource(R.drawable.icon_fukidasi)));
+                        .title("" + longTapLocation.latitude + " :" + longTapLocation.longitude));
                 mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(newLocation, 18));
+
+                CheckCreatingDialog dialog = new CheckCreatingDialog();
+                dialog.show(getSupportFragmentManager(), "CheckCreatingDialog");
             }
         });
     }
