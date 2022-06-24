@@ -50,7 +50,8 @@ public class CheckCreatingDialog extends DialogFragment
         alertDialog.show();
     }
 
-    public void SetMapAct(MapsActivity receive) {
+    public void SetMapAct(MapsActivity receive)
+    {
         mapAct = receive;
     }
 }
