@@ -2,7 +2,9 @@ package jp.ac.ritsumei.ise.phy.exe3.is0578ri.ritsumeimap;
 
 import androidx.fragment.app.FragmentActivity;
 
+import android.content.Intent;
 import android.os.Bundle;
+import android.view.View;
 
 import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
@@ -77,8 +79,15 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
                 mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(newLocation, 18));
 
                 CheckCreatingDialog dialog = new CheckCreatingDialog();
+                dialog.SetMapAct(MapsActivity.this);
                 dialog.show(getSupportFragmentManager(), "CheckCreatingDialog");
             }
         });
+    }
+
+    public void LoadReviewRegisterActivity()
+    {
+        Intent intent = new Intent(getApplication(), ReviewRegister.class);
+        startActivity(intent);
     }
 }
