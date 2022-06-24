@@ -12,6 +12,7 @@ import com.google.android.gms.maps.OnMapReadyCallback;
 import com.google.android.gms.maps.SupportMapFragment;
 import com.google.android.gms.maps.model.BitmapDescriptorFactory;
 import com.google.android.gms.maps.model.LatLng;
+import com.google.android.gms.maps.model.Marker;
 import com.google.android.gms.maps.model.MarkerOptions;
 
 import java.util.Locale;
@@ -22,6 +23,8 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
 {
     private GoogleMap mMap;
     private ActivityMapsBinding binding;
+
+    private Marker instantMarker;
 
     @Override
     protected void onCreate(Bundle savedInstanceState)
@@ -74,7 +77,7 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
             public void onMapLongClick(LatLng longTapLocation)
             {
                 LatLng newLocation = new LatLng(longTapLocation.latitude, longTapLocation.longitude);
-                mMap.addMarker(new MarkerOptions().position(newLocation)
+                instantMarker = mMap.addMarker(new MarkerOptions().position(newLocation)
                         .title("" + longTapLocation.latitude + " :" + longTapLocation.longitude));
                 mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(newLocation, 18));
 
@@ -88,6 +91,8 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
     public void LoadReviewRegisterActivity()
     {
         Intent intent = new Intent(getApplication(), ReviewRegister.class);
+        intent.putExtra("Latitude", instantMarker.getPosition().latitude);
+        intent.putExtra("Logtude", instantMarker.getPosition().longitude);
         startActivity(intent);
     }
 }
