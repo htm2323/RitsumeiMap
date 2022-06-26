@@ -95,4 +95,9 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
         intent.putExtra("Logtude", instantMarker.getPosition().longitude);
         startActivity(intent);
     }
+
+    public void DeleteInstantMarker()
+    {
+        instantMarker.remove();
+    }
 }
