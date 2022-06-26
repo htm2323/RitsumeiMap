@@ -1,7 +1,6 @@
 package jp.ac.ritsumei.ise.phy.exe3.is0578ri.ritsumeimap;
 
 import androidx.appcompat.app.AppCompatActivity;
-import androidx.core.app.ComponentActivity;
 
 import android.content.Intent;
 import android.os.Bundle;
@@ -37,7 +36,11 @@ public class ReviewRegister extends AppCompatActivity
 
     public void OnPostButtonDown(View view)
     {
+        ReviewData data = new ReviewData(inputPlaceName.getText().toString(),
+                                            inputPostedPersonName.getText().toString(),
+                                            inputReview.getText().toString());
         CheckPostingReviewDialogController dialog = new CheckPostingReviewDialogController();
+        dialog.ServeData(data);
         dialog.show(getSupportFragmentManager(), "CheckPostDialog");
     }
 

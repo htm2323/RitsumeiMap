@@ -30,6 +30,7 @@ public class CheckCreatingDialog extends DialogFragment
                         // ボタンを押した時の処理
                         System.out.println("OK Button Down");
 
+                        mapAct.DeleteInstantMarker();
                         mapAct.LoadReviewRegisterActivity();
                     }
                 })
