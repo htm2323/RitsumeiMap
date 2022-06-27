@@ -6,6 +6,7 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.EditText;
+import android.widget.Toast;
 
 public class ReviewRegister extends AppCompatActivity
 {
@@ -39,12 +40,27 @@ public class ReviewRegister extends AppCompatActivity
                                             inputReview.getText().toString());
         CheckPostingReviewDialogController dialog = new CheckPostingReviewDialogController();
         dialog.ServeData(data);
+        dialog.ServeActivity(ReviewRegister.this);
         dialog.show(getSupportFragmentManager(), "CheckPostDialog");
     }
 
     public void OnCancelButtonDown(View view)
     {
         CheckCancelEditingDialogController dialog = new CheckCancelEditingDialogController();
+        dialog.ServeActivity(ReviewRegister.this);
         dialog.show(getSupportFragmentManager(), "CheckCancelDialog");
+    }
+
+    public void BackToMapActivity()
+    {
+        Intent intent = new Intent(getApplication(), MapsActivity.class);
+        intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK | Intent.FLAG_ACTIVITY_NEW_TASK);
+        startActivity(intent);
+    }
+
+    public void ShowToastMessage(String message)
+    {
+        Toast toast = Toast.makeText(this, message, Toast.LENGTH_LONG);
+        toast.show();
     }
 }

@@ -15,6 +15,7 @@ import com.nifcloud.mbaas.core.NCMBObject;
 public class CheckPostingReviewDialogController extends DialogFragment
 {
     ReviewData data;
+    ReviewRegister revAct;
 
     @Override
     public Dialog onCreateDialog(@Nullable Bundle savedInstanceState)
@@ -28,7 +29,7 @@ public class CheckPostingReviewDialogController extends DialogFragment
                         // ボタンを押した時の処理
                         System.out.println("OK Button Down");
 
-                        SaveReviewToDatabase();
+                        //SaveReviewToDatabase();
                     }
                 })
                 .setNegativeButton("キャンセル", new DialogInterface.OnClickListener()
@@ -70,6 +71,8 @@ public class CheckPostingReviewDialogController extends DialogFragment
                 {
                     //保存に失敗した場合の処理
                     System.out.println("save process failed at contents save");
+
+                    revAct.ShowToastMessage("口コミの保存に失敗しました。もう一度お試しください。");
                 }
                 else
                 {
@@ -97,11 +100,15 @@ public class CheckPostingReviewDialogController extends DialogFragment
                             {
                                 //保存に失敗した場合の処理
                                 System.out.println("save process failed at Latitude Save");
+                                revAct.ShowToastMessage("口コミの保存に失敗しました。もう一度お試しください。");
                             }
                             else
                             {
                                 //保存に成功した場合の処理
                                 System.out.println("save process success");
+                                revAct.ShowToastMessage("口コミを保存しました!");
+
+                                revAct.BackToMapActivity();
                             }
                         }
                     });
@@ -113,5 +120,10 @@ public class CheckPostingReviewDialogController extends DialogFragment
     public void ServeData(ReviewData inputData)
     {
         data = inputData;
+    }
+
+    public  void ServeActivity(ReviewRegister reseiveAct)
+    {
+        revAct = reseiveAct;
     }
 }

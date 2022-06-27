@@ -10,6 +10,8 @@ import androidx.fragment.app.DialogFragment;
 
 public class CheckCancelEditingDialogController extends DialogFragment
 {
+    ReviewRegister revAct;
+
     @Override
     public Dialog onCreateDialog(@Nullable Bundle savedInstanceState)
     {
@@ -21,6 +23,9 @@ public class CheckCancelEditingDialogController extends DialogFragment
                     {
                         // ボタンを押した時の処理
                         System.out.println("OK Button Down");
+
+                        revAct.ShowToastMessage("編集を中止しました。");
+                        revAct.BackToMapActivity();
                     }
                 })
                 .setNegativeButton("編集を続ける", new DialogInterface.OnClickListener()
@@ -33,5 +38,10 @@ public class CheckCancelEditingDialogController extends DialogFragment
                 });
 
         return builder.create();
+    }
+
+    public  void ServeActivity(ReviewRegister reseiveAct)
+    {
+        revAct = reseiveAct;
     }
 }
