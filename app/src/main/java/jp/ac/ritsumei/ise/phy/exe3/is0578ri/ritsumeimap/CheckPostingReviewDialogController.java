@@ -3,6 +3,7 @@ package jp.ac.ritsumei.ise.phy.exe3.is0578ri.ritsumeimap;
 import android.app.AlertDialog;
 import android.app.Dialog;
 import android.content.DialogInterface;
+import android.location.Location;
 import android.os.Bundle;
 
 import androidx.annotation.Nullable;
@@ -29,7 +30,7 @@ public class CheckPostingReviewDialogController extends DialogFragment
                         // ボタンを押した時の処理
                         System.out.println("OK Button Down");
 
-                        //SaveReviewToDatabase();
+                        SaveReviewToDatabase();
                     }
                 })
                 .setNegativeButton("キャンセル", new DialogInterface.OnClickListener()
@@ -82,8 +83,10 @@ public class CheckPostingReviewDialogController extends DialogFragment
 
                     try
                     {
-                        latObj.put("Lat", data.latitude);
-                        latObj.put("Long", data.longtude);
+                        Location loc = new Location(data.placeName);
+                        loc.setLatitude(data.latitude);
+                        loc.setLongitude(data.longtude);
+                        latObj.put("Location", loc);
                         latObj.put("ReviewObjID", objID);
                     }
                     catch (NCMBException er)

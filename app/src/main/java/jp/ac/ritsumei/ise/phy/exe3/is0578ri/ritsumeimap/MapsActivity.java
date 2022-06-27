@@ -22,8 +22,11 @@ import com.google.android.gms.maps.model.BitmapDescriptorFactory;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.Marker;
 import com.google.android.gms.maps.model.MarkerOptions;
+import com.nifcloud.mbaas.core.NCMBException;
+import com.nifcloud.mbaas.core.NCMBObject;
 
 import java.util.Arrays;
+import java.util.List;
 import java.util.Locale;
 
 import jp.ac.ritsumei.ise.phy.exe3.is0578ri.ritsumeimap.databinding.ActivityMapsBinding;
@@ -31,12 +34,15 @@ import jp.ac.ritsumei.ise.phy.exe3.is0578ri.ritsumeimap.databinding.ActivityMaps
 public class MapsActivity extends AppCompatActivity implements GoogleMap.OnMyLocationButtonClickListener,
         GoogleMap.OnMyLocationClickListener, OnMapReadyCallback {
     private GoogleMap mMap;
+    private SearchingDataManager searchingDataManager;
 
     private Marker instantMarker;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+
+        searchingDataManager = new SearchingDataManager();
 
         setContentView(R.layout.activity_maps);
 
@@ -84,18 +90,27 @@ public class MapsActivity extends AppCompatActivity implements GoogleMap.OnMyLoc
         //mMap.addMarker(new MarkerOptions().position(bkc).title("Marker in BKC").snippet("補足"));
         mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(bkc, 16));
 
-        /*mMap.setOnMapClickListener(new GoogleMap.OnMapClickListener()
+        try
         {
-            @Override
-            public void onMapClick(LatLng tapLocation)
+            List<NCMBObject> pins = searchingDataManager.SearchDataNearFromCenterOfMap(bkc.latitude, bkc.longitude, 2);
+            if (pins.size() > 0)
             {
-                LatLng location;
-                location = new LatLng(tapLocation.latitude, tapLocation.longitude);
-                String str = String.format(Locale.US, "%f, %f", tapLocation.latitude, tapLocation.longitude);
-                //mMap.addMarker(new MarkerOptions().position(location).title(str).snippet("TapTest"));
-                mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(location, 16));
+                for (NCMBObject obj: pins)
+                {
+                    NCMBObject contents = new NCMBObject("ReviewContents");
+                    contents.setObjectId(obj.getString("ReviewObjID"));
+                    contents.fetch();
+                    mMap.addMarker(new MarkerOptions().position(new LatLng(obj.getGeolocation("Location").getLatitude(),
+                                                                            obj.getGeolocation("Location").getLongitude()))
+                            .title(contents.getString("PlaceName"))
+                            .icon(BitmapDescriptorFactory.fromResource(R.drawable.icon_fukidasi)));
+                }
             }
-        });*/
+        }
+        catch (NCMBException e)
+        {
+            e.printStackTrace();
+        }
 
         mMap.setOnMapLongClickListener(new GoogleMap.OnMapLongClickListener()
         {
