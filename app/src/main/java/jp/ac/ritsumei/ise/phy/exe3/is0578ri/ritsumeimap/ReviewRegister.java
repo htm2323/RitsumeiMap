@@ -60,7 +60,6 @@ public class ReviewRegister extends AppCompatActivity
 
     public void ShowToastMessage(String message)
     {
-        Toast toast = Toast.makeText(this, message, Toast.LENGTH_LONG);
-        toast.show();
+        Toast.makeText(this, message, Toast.LENGTH_LONG).show();
     }
 }
