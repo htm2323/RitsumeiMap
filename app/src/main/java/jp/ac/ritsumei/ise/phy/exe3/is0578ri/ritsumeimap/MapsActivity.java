@@ -92,7 +92,7 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
     {
         Intent intent = new Intent(getApplication(), ReviewRegister.class);
         intent.putExtra("Latitude", instantMarker.getPosition().latitude);
-        intent.putExtra("Logtude", instantMarker.getPosition().longitude);
+        intent.putExtra("Longtude", instantMarker.getPosition().longitude);
         startActivity(intent);
     }
 

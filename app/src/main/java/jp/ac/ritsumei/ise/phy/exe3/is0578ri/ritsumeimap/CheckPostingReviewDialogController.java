@@ -12,8 +12,6 @@ import com.nifcloud.mbaas.core.DoneCallback;
 import com.nifcloud.mbaas.core.NCMBException;
 import com.nifcloud.mbaas.core.NCMBObject;
 
-import java.util.Arrays;
-
 public class CheckPostingReviewDialogController extends DialogFragment
 {
     ReviewData data;
@@ -30,7 +28,7 @@ public class CheckPostingReviewDialogController extends DialogFragment
                         // ボタンを押した時の処理
                         System.out.println("OK Button Down");
 
-
+                        SaveReviewToDatabase();
                     }
                 })
                 .setNegativeButton("キャンセル", new DialogInterface.OnClickListener()
@@ -47,11 +45,15 @@ public class CheckPostingReviewDialogController extends DialogFragment
 
     private void SaveReviewToDatabase()
     {
-        NCMBObject obj = new NCMBObject("ReviewData");
+        NCMBObject latObj = new NCMBObject("ReviewLatitude");
+        NCMBObject contentsObj = new NCMBObject("ReviewContents");
 
         try
         {
-            obj.put("datalist", Arrays.asList("date", "name", "place", "message"));
+            contentsObj.put("PlaceName", data.placeName);
+            contentsObj.put("PostPerson", data.postPerson);
+            contentsObj.put("Review", data.review);
+            contentsObj.put("GoodCount", 0);
         }
         catch (NCMBException e)
         {
@@ -59,7 +61,7 @@ public class CheckPostingReviewDialogController extends DialogFragment
         }
 
         // データストアへの登録
-        obj.saveInBackground(new DoneCallback()
+        contentsObj.saveInBackground(new DoneCallback()
         {
             @Override
             public void done(NCMBException e)
@@ -67,12 +69,42 @@ public class CheckPostingReviewDialogController extends DialogFragment
                 if(e != null)
                 {
                     //保存に失敗した場合の処理
-                    System.out.println("save process failed");
+                    System.out.println("save process failed at contents save");
                 }
                 else
                 {
                     //保存に成功した場合の処理
-                    System.out.println("save process success");
+                    System.out.println("save process progressing");
+                    String objID = contentsObj.getObjectId();
+
+                    try
+                    {
+                        latObj.put("Lat", data.latitude);
+                        latObj.put("Long", data.longtude);
+                        latObj.put("ReviewObjID", objID);
+                    }
+                    catch (NCMBException er)
+                    {
+                        er.printStackTrace();
+                    }
+
+                    latObj.saveInBackground(new DoneCallback()
+                    {
+                        @Override
+                        public void done(NCMBException e)
+                        {
+                            if (e != null)
+                            {
+                                //保存に失敗した場合の処理
+                                System.out.println("save process failed at Latitude Save");
+                            }
+                            else
+                            {
+                                //保存に成功した場合の処理
+                                System.out.println("save process success");
+                            }
+                        }
+                    });
                 }
             }
         });

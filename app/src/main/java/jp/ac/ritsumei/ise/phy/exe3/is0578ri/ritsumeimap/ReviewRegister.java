@@ -11,9 +11,6 @@ public class ReviewRegister extends AppCompatActivity
 {
     double latitude;
     double longtude;
-    String placeName;
-    String postedPersonName;
-    String reviewText;
 
     EditText inputPlaceName;
     EditText inputPostedPersonName;
@@ -36,7 +33,8 @@ public class ReviewRegister extends AppCompatActivity
 
     public void OnPostButtonDown(View view)
     {
-        ReviewData data = new ReviewData(inputPlaceName.getText().toString(),
+        ReviewData data = new ReviewData(latitude, longtude,
+                                            inputPlaceName.getText().toString(),
                                             inputPostedPersonName.getText().toString(),
                                             inputReview.getText().toString());
         CheckPostingReviewDialogController dialog = new CheckPostingReviewDialogController();
