@@ -9,6 +9,7 @@ import android.Manifest;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.location.Location;
+import android.location.LocationRequest;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.Toast;
@@ -36,6 +37,8 @@ public class MapsActivity extends AppCompatActivity implements GoogleMap.OnMyLoc
     private GoogleMap mMap;
     private SearchingDataManager searchingDataManager;
 
+    private LatLng bkc = new LatLng(34.981984561994466, 135.9623099219572);
+
     private Marker instantMarker;
 
     @Override
@@ -62,11 +65,12 @@ public class MapsActivity extends AppCompatActivity implements GoogleMap.OnMyLoc
         settings.setZoomControlsEnabled(true);
         settings.setZoomGesturesEnabled(true);
         settings.setRotateGesturesEnabled(true);
+        settings.setMapToolbarEnabled(false);
         //settings.setCompassEnabled(true);
 
-        /*if (ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION)
+        if (ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION)
                         != PackageManager.PERMISSION_GRANTED
-                && ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_COARSE_LOCATION)
+                || ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_COARSE_LOCATION)
                         != PackageManager.PERMISSION_GRANTED)
         {
             // TODO: Consider calling
@@ -80,37 +84,13 @@ public class MapsActivity extends AppCompatActivity implements GoogleMap.OnMyLoc
             RequestPermisson();
             return;
         }
+
         mMap.setMyLocationEnabled(true);
         mMap.setOnMyLocationButtonClickListener(this);
         mMap.setOnMyLocationClickListener(this);
-        settings.setMyLocationButtonEnabled(true);*/
+        settings.setMyLocationButtonEnabled(true);
 
-        // Add a marker in Sydney and move the camera
-        LatLng bkc = new LatLng(34.981984561994466, 135.9623099219572);
-        //mMap.addMarker(new MarkerOptions().position(bkc).title("Marker in BKC").snippet("補足"));
-        mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(bkc, 16));
-
-        try
-        {
-            List<NCMBObject> pins = searchingDataManager.SearchDataNearFromCenterOfMap(bkc.latitude, bkc.longitude, 2);
-            if (pins.size() > 0)
-            {
-                for (NCMBObject obj: pins)
-                {
-                    NCMBObject contents = new NCMBObject("ReviewContents");
-                    contents.setObjectId(obj.getString("ReviewObjID"));
-                    contents.fetch();
-                    mMap.addMarker(new MarkerOptions().position(new LatLng(obj.getGeolocation("Location").getLatitude(),
-                                                                            obj.getGeolocation("Location").getLongitude()))
-                            .title(contents.getString("PlaceName"))
-                            .icon(BitmapDescriptorFactory.fromResource(R.drawable.icon_fukidasi)));
-                }
-            }
-        }
-        catch (NCMBException e)
-        {
-            e.printStackTrace();
-        }
+        ShowMap(bkc);
 
         mMap.setOnMapLongClickListener(new GoogleMap.OnMapLongClickListener()
         {
@@ -127,6 +107,33 @@ public class MapsActivity extends AppCompatActivity implements GoogleMap.OnMyLoc
                 dialog.show(getSupportFragmentManager(), "CheckCreatingDialog");
             }
         });
+    }
+
+    public void ShowMap(LatLng nowLocation)
+    {
+        mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(nowLocation, 16));
+
+        try
+        {
+            List<NCMBObject> pins = searchingDataManager.SearchDataNearFromCenterOfMap(nowLocation.latitude, nowLocation.longitude, 2);
+            if (pins.size() > 0)
+            {
+                for (NCMBObject obj: pins)
+                {
+                    NCMBObject contents = new NCMBObject("ReviewContents");
+                    contents.setObjectId(obj.getString("ReviewObjID"));
+                    contents.fetch();
+                    mMap.addMarker(new MarkerOptions().position(new LatLng(obj.getGeolocation("Location").getLatitude(),
+                            obj.getGeolocation("Location").getLongitude()))
+                            .title(contents.getString("PlaceName"))
+                            .icon(BitmapDescriptorFactory.fromResource(R.drawable.icon_fukidasi)));
+                }
+            }
+        }
+        catch (NCMBException e)
+        {
+            e.printStackTrace();
+        }
     }
 
     public void LoadReviewRegisterActivity()
@@ -158,12 +165,36 @@ public class MapsActivity extends AppCompatActivity implements GoogleMap.OnMyLoc
         Toast.makeText(this, "Current location:\n" + location, Toast.LENGTH_LONG).show();
     }
 
+    @Override
+    public void onRequestPermissionsResult(int requestCode, String[] permission, int[] grantResults) {
+        super.onRequestPermissionsResult(requestCode, permission, grantResults);
+
+        if (grantResults.length <= 0) { return; }
+        switch(requestCode)
+        {
+            case 1: {
+                if (grantResults[0] == PackageManager.PERMISSION_GRANTED) {
+                    /// 許可が取れた場合
+                    ShowMap(bkc);
+                } else {
+                    /// 許可が取れなかった場合
+                    Toast.makeText(this,
+                            "現在地が取得できません。現在地を利用したい場合は権限を許可してください。",
+                            Toast.LENGTH_LONG).show();
+                    ShowMap(bkc);
+                }
+            }
+            return;
+        }
+    }
+
     private void RequestPermisson()
     {
-        String[] permisson = new String[3];
-        permisson[0] = Manifest.permission.ACCESS_COARSE_LOCATION;
-        permisson[1] = Manifest.permission.ACCESS_FINE_LOCATION;
-        permisson[2] = Manifest.permission.ACCESS_BACKGROUND_LOCATION;
-        ActivityCompat.requestPermissions(this, permisson, 1234);
+        ActivityCompat.requestPermissions(this,
+                new String[]
+                {
+                    Manifest.permission.ACCESS_COARSE_LOCATION,
+                    Manifest.permission.ACCESS_FINE_LOCATION
+                }, 1);
     }
 }
