@@ -10,6 +10,7 @@ import android.widget.Button;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.nifcloud.mbaas.core.DoneCallback;
 import com.nifcloud.mbaas.core.NCMBException;
 import com.nifcloud.mbaas.core.NCMBObject;
 
@@ -65,15 +66,51 @@ public class ReviewShower extends AppCompatActivity
     @SuppressLint("SetTextI18n")
     public void OnGoodButtonClick(View view) throws NCMBException
     {
+        AppCompatActivity thisAct = this;
+
         contents.increment("GoodCount", 1);
+        contents.saveInBackground(new DoneCallback()
+        {
+            @Override
+            public void done(NCMBException e)
+            {
+                if(e != null)
+                {
+                    //保存に失敗した場合の処理
+                    System.out.println("save process failed at contents save");
+                    try
+                    {
+                        contents.increment("GoodCount", -1);
+                    }
+                    catch (NCMBException ncmbException)
+                    {
+                        ncmbException.printStackTrace();
+                    }
+                }
+                else
+                {
+                    //保存に成功した場合の処理
+                    System.out.println("save process succeed");
 
-        Toast.makeText(this,
-                "いいねしました！",
-                Toast.LENGTH_LONG).show();
+                    Toast.makeText(thisAct,
+                            "いいねしました！",
+                            Toast.LENGTH_LONG).show();
 
-        goodCountTxt.setText(contents.getString("GoodCount") + "いいね");
-        Button goodButton = (Button) findViewById(R.id.goodButton);
-        goodButton.setEnabled(false);
+                    try
+                    {
+                        contents.fetch();
+                    }
+                    catch (NCMBException ncmbException)
+                    {
+                        ncmbException.printStackTrace();
+                    }
+
+                    goodCountTxt.setText(contents.getInt("GoodCount") + "いいね");
+                    Button goodButton = (Button) findViewById(R.id.goodButton);
+                    goodButton.setEnabled(false);
+                }
+            }
+        });
     }
 
     public void OnBackButtonClick(View view)
