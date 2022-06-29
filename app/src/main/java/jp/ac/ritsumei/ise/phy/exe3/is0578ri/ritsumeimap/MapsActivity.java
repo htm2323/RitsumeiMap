@@ -6,12 +6,16 @@ import androidx.core.app.ActivityCompat;
 import androidx.fragment.app.FragmentActivity;
 
 import android.Manifest;
+import android.app.AlertDialog;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.location.Location;
 import android.location.LocationRequest;
 import android.os.Bundle;
+import android.view.Gravity;
 import android.view.View;
+import android.view.WindowManager;
 import android.widget.Toast;
 
 import com.google.android.gms.maps.CameraUpdateFactory;
@@ -102,9 +106,10 @@ public class MapsActivity extends AppCompatActivity implements GoogleMap.OnMyLoc
                         .title("" + longTapLocation.latitude + " :" + longTapLocation.longitude));
                 mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(newLocation, 18));
 
-                CheckCreatingDialog dialog = new CheckCreatingDialog();
+                /*CheckCreatingDialog dialog = new CheckCreatingDialog();
                 dialog.SetMapAct(MapsActivity.this);
-                dialog.show(getSupportFragmentManager(), "CheckCreatingDialog");
+                dialog.show(getSupportFragmentManager(), "CheckCreatingDialog");*/
+                CreateCheckDialog();
             }
         });
 
@@ -207,5 +212,39 @@ public class MapsActivity extends AppCompatActivity implements GoogleMap.OnMyLoc
         Intent intent = new Intent(getApplication(), ReviewShower.class);
         intent.putExtra("ContentsID", marker.getTag().toString());
         startActivity(intent);
+    }
+
+    private void CreateCheckDialog()
+    {
+        AlertDialog.Builder builder = new AlertDialog.Builder(this);
+        builder.setMessage("この場所に口コミを作成しますか？")
+                .setPositiveButton("作る", new DialogInterface.OnClickListener()
+                {
+                    public void onClick(DialogInterface dialog, int id)
+                    {
+                        // ボタンを押した時の処理
+                        System.out.println("OK Button Down");
+
+                        DeleteInstantMarker();
+                        LoadReviewRegisterActivity();
+                    }
+                })
+                .setNegativeButton("やめる", new DialogInterface.OnClickListener()
+                {
+                    public void onClick(DialogInterface dialog, int id)
+                    {
+                        // ボタンを押した時の処理
+                        System.out.println("Cancel Button Down");
+
+                        DeleteInstantMarker();
+                    }
+                });
+
+        AlertDialog alertDialog = builder.create();
+        WindowManager.LayoutParams lp = alertDialog.getWindow().getAttributes();
+        lp.gravity = Gravity.BOTTOM;
+
+        alertDialog.getWindow().setAttributes(lp);
+        alertDialog.show();
     }
 }
