@@ -245,6 +245,7 @@ public class MapsActivity extends AppCompatActivity implements GoogleMap.OnMyLoc
         lp.gravity = Gravity.BOTTOM;
 
         alertDialog.getWindow().setAttributes(lp);
+        alertDialog.getWindow().clearFlags(WindowManager.LayoutParams.FLAG_DIM_BEHIND);
         alertDialog.show();
     }
 }
