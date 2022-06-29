@@ -33,7 +33,7 @@ import java.util.Locale;
 import jp.ac.ritsumei.ise.phy.exe3.is0578ri.ritsumeimap.databinding.ActivityMapsBinding;
 
 public class MapsActivity extends AppCompatActivity implements GoogleMap.OnMyLocationButtonClickListener,
-        GoogleMap.OnMyLocationClickListener, OnMapReadyCallback {
+        GoogleMap.OnMyLocationClickListener, GoogleMap.OnInfoWindowClickListener, OnMapReadyCallback {
     private GoogleMap mMap;
     private SearchingDataManager searchingDataManager;
 
@@ -107,6 +107,8 @@ public class MapsActivity extends AppCompatActivity implements GoogleMap.OnMyLoc
                 dialog.show(getSupportFragmentManager(), "CheckCreatingDialog");
             }
         });
+
+        mMap.setOnInfoWindowClickListener(this);
     }
 
     public void ShowMap(LatLng nowLocation)
@@ -123,10 +125,11 @@ public class MapsActivity extends AppCompatActivity implements GoogleMap.OnMyLoc
                     NCMBObject contents = new NCMBObject("ReviewContents");
                     contents.setObjectId(obj.getString("ReviewObjID"));
                     contents.fetch();
-                    mMap.addMarker(new MarkerOptions().position(new LatLng(obj.getGeolocation("Location").getLatitude(),
+                    Marker marker = mMap.addMarker(new MarkerOptions().position(new LatLng(obj.getGeolocation("Location").getLatitude(),
                             obj.getGeolocation("Location").getLongitude()))
                             .title(contents.getString("PlaceName"))
                             .icon(BitmapDescriptorFactory.fromResource(R.drawable.icon_fukidasi)));
+                    marker.setTag(contents.getObjectId());
                 }
             }
         }
@@ -196,5 +199,13 @@ public class MapsActivity extends AppCompatActivity implements GoogleMap.OnMyLoc
                     Manifest.permission.ACCESS_COARSE_LOCATION,
                     Manifest.permission.ACCESS_FINE_LOCATION
                 }, 1);
+    }
+
+    @Override
+    public void onInfoWindowClick(@NonNull Marker marker)
+    {
+        Intent intent = new Intent(getApplication(), ReviewShower.class);
+        intent.putExtra("ContentsID", marker.getTag().toString());
+        startActivity(intent);
     }
 }
