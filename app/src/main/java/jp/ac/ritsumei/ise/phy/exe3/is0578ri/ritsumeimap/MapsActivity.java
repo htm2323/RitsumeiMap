@@ -27,6 +27,7 @@ import com.google.android.gms.maps.model.BitmapDescriptorFactory;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.Marker;
 import com.google.android.gms.maps.model.MarkerOptions;
+import com.nifcloud.mbaas.core.NCMB;
 import com.nifcloud.mbaas.core.NCMBException;
 import com.nifcloud.mbaas.core.NCMBObject;
 
@@ -49,6 +50,10 @@ public class MapsActivity extends AppCompatActivity implements GoogleMap.OnMyLoc
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+
+        NCMB.initialize(this.getApplicationContext(),
+                "242065d2599016f30f6c72b88582430b94e97efe9b9aacdfe55875e16f740f9f",
+                "da8cbfbb576f6c3ef0205be62528c7effe0fb5b9b7464d4604ccff0b004a67aa");
 
         searchingDataManager = new SearchingDataManager();
 
@@ -73,6 +78,24 @@ public class MapsActivity extends AppCompatActivity implements GoogleMap.OnMyLoc
         settings.setMapToolbarEnabled(false);
         //settings.setCompassEnabled(true);
 
+        ShowMap(bkc);
+
+        mMap.setOnMapLongClickListener(new GoogleMap.OnMapLongClickListener()
+        {
+            @Override
+            public void onMapLongClick(LatLng longTapLocation)
+            {
+                LatLng newLocation = new LatLng(longTapLocation.latitude, longTapLocation.longitude);
+
+                instantMarker = mMap.addMarker(new MarkerOptions().position(newLocation)
+                        .title("" + longTapLocation.latitude + " :" + longTapLocation.longitude));
+                mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(newLocation, 18));
+                CreateCheckDialog();
+            }
+        });
+
+        mMap.setOnInfoWindowClickListener(this);
+
         if (ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION)
                         != PackageManager.PERMISSION_GRANTED
                 || ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_COARSE_LOCATION)
@@ -94,24 +117,6 @@ public class MapsActivity extends AppCompatActivity implements GoogleMap.OnMyLoc
         mMap.setOnMyLocationButtonClickListener(this);
         mMap.setOnMyLocationClickListener(this);
         settings.setMyLocationButtonEnabled(true);
-
-        ShowMap(bkc);
-
-        mMap.setOnMapLongClickListener(new GoogleMap.OnMapLongClickListener()
-        {
-            @Override
-            public void onMapLongClick(LatLng longTapLocation)
-            {
-                LatLng newLocation = new LatLng(longTapLocation.latitude, longTapLocation.longitude);
-
-                instantMarker = mMap.addMarker(new MarkerOptions().position(newLocation)
-                        .title("" + longTapLocation.latitude + " :" + longTapLocation.longitude));
-                mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(newLocation, 18));
-                CreateCheckDialog();
-            }
-        });
-
-        mMap.setOnInfoWindowClickListener(this);
     }
 
     public void ShowMap(LatLng nowLocation)
@@ -127,7 +132,9 @@ public class MapsActivity extends AppCompatActivity implements GoogleMap.OnMyLoc
                 {
                     NCMBObject contents = new NCMBObject("ReviewContents");
                     contents.setObjectId(obj.getString("ReviewObjID"));
+                    System.out.println("ReviewObjID: " + contents.getObjectId());
                     contents.fetch();
+                    System.out.println("Fetching OK");
                     Marker marker = mMap.addMarker(new MarkerOptions().position(new LatLng(obj.getGeolocation("Location").getLatitude(),
                             obj.getGeolocation("Location").getLongitude()))
                             .title(contents.getString("PlaceName"))
@@ -139,6 +146,7 @@ public class MapsActivity extends AppCompatActivity implements GoogleMap.OnMyLoc
         }
         catch (NCMBException e)
         {
+            System.out.println("Error at pin creating");
             e.printStackTrace();
         }
     }
@@ -173,17 +181,22 @@ public class MapsActivity extends AppCompatActivity implements GoogleMap.OnMyLoc
     }
 
     @Override
-    public void onRequestPermissionsResult(int requestCode, String[] permission, int[] grantResults) {
+    public void onRequestPermissionsResult(int requestCode, String[] permission, int[] grantResults)
+    {
         super.onRequestPermissionsResult(requestCode, permission, grantResults);
 
         if (grantResults.length <= 0) { return; }
         switch(requestCode)
         {
-            case 1: {
-                if (grantResults[0] == PackageManager.PERMISSION_GRANTED) {
+            case 1:
+            {
+                if (grantResults[0] == PackageManager.PERMISSION_GRANTED)
+                {
                     /// 許可が取れた場合
                     ShowMap(bkc);
-                } else {
+                }
+                else
+                {
                     /// 許可が取れなかった場合
                     Toast.makeText(this,
                             "現在地が取得できません。現在地を利用したい場合は権限を許可してください。",
