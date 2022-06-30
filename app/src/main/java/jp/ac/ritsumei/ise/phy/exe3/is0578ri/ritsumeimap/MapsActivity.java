@@ -131,6 +131,7 @@ public class MapsActivity extends AppCompatActivity implements GoogleMap.OnMyLoc
                     Marker marker = mMap.addMarker(new MarkerOptions().position(new LatLng(obj.getGeolocation("Location").getLatitude(),
                             obj.getGeolocation("Location").getLongitude()))
                             .title(contents.getString("PlaceName"))
+                            .snippet("詳細はここをクリック")
                             .icon(BitmapDescriptorFactory.fromResource(R.drawable.icon_fukidasi)));
                     marker.setTag(contents.getObjectId());
                 }
