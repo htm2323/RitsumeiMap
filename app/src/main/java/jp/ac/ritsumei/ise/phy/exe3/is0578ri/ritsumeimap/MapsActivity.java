@@ -7,12 +7,9 @@ import androidx.fragment.app.FragmentActivity;
 
 import android.Manifest;
 import android.app.AlertDialog;
-import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.pm.PackageManager;
-import android.location.Address;
-import android.location.Geocoder;
 import android.location.Location;
 import android.location.LocationRequest;
 import android.os.Bundle;
@@ -106,20 +103,6 @@ public class MapsActivity extends AppCompatActivity implements GoogleMap.OnMyLoc
             public void onMapLongClick(LatLng longTapLocation)
             {
                 LatLng newLocation = new LatLng(longTapLocation.latitude, longTapLocation.longitude);
-
-                Geocoder geocoder = new Geocoder(getApplicationContext(), Locale.JAPAN);
-                List<Address> addresses;
-
-                try
-                {
-                    addresses = geocoder.getFromLocation(longTapLocation.latitude, longTapLocation.longitude, 1);
-                    String locName = addresses.get(0).getFeatureName();
-                    System.out.println("loc: " + locName);
-                }
-                catch (IOException e)
-                {
-                    e.printStackTrace();
-                }
 
                 instantMarker = mMap.addMarker(new MarkerOptions().position(newLocation)
                         .title("" + longTapLocation.latitude + " :" + longTapLocation.longitude));
