@@ -9,9 +9,9 @@
     <TextView
         android:id="@+id/placeNameHeader"
         android:layout_width="140dp"
-        android:layout_height="40dp"
+        android:layout_height="30dp"
         android:text="場所の名前"
-        android:textSize="24dp"
+        android:textSize="20sp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.191"
@@ -22,59 +22,59 @@
     <TextView
         android:id="@+id/PlaceNameTxt"
         android:layout_width="300dp"
-        android:layout_height="50dp"
+        android:layout_height="60dp"
         android:text="TextView"
-        android:textSize="24dp"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.495"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.179" />
-
-    <TextView
-        android:id="@+id/postPersonNameHeader"
-        android:layout_width="140dp"
-        android:layout_height="40dp"
-        android:text="投稿者"
-        android:textSize="24dp"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.202"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.267" />
-
-    <TextView
-        android:id="@+id/postPersonNameTxt"
-        android:layout_width="300dp"
-        android:layout_height="50dp"
-        android:text="TextView"
-        android:textSize="24dp"
+        android:textSize="20sp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.468"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.352" />
+        app:layout_constraintVertical_bias="0.16" />
+
+    <TextView
+        android:id="@+id/postPersonNameHeader"
+        android:layout_width="140dp"
+        android:layout_height="30dp"
+        android:text="投稿者"
+        android:textSize="20sp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.191"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias="0.254" />
+
+    <TextView
+        android:id="@+id/postPersonNameTxt"
+        android:layout_width="300dp"
+        android:layout_height="60dp"
+        android:text="TextView"
+        android:textSize="20sp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.468"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias="0.324" />
 
     <TextView
         android:id="@+id/postDateHeader"
         android:layout_width="140dp"
-        android:layout_height="40dp"
+        android:layout_height="30dp"
         android:text="投稿日時"
-        android:textSize="24dp"
+        android:textSize="20sp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.202"
+        app:layout_constraintHorizontal_bias="0.191"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.432" />
+        app:layout_constraintVertical_bias="0.413" />
 
     <TextView
         android:id="@+id/postDateTxt"
         android:layout_width="300dp"
-        android:layout_height="40dp"
+        android:layout_height="30dp"
         android:text="TextView"
         android:textAlignment="viewStart"
         android:textSize="20dp"
@@ -83,33 +83,33 @@
         app:layout_constraintHorizontal_bias="0.468"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.499" />
+        app:layout_constraintVertical_bias="0.466" />
 
     <TextView
         android:id="@+id/reviewHeader"
         android:layout_width="140dp"
-        android:layout_height="40dp"
+        android:layout_height="30dp"
         android:text="内容"
-        android:textSize="24dp"
+        android:textSize="20sp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.191"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.568" />
+        app:layout_constraintVertical_bias="0.526" />
 
     <TextView
         android:id="@+id/reviewTxt"
         android:layout_width="300dp"
-        android:layout_height="100dp"
+        android:layout_height="120dp"
         android:text="TextView"
-        android:textSize="24dp"
+        android:textSize="20sp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.441"
+        app:layout_constraintHorizontal_bias="0.468"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.706" />
+        app:layout_constraintVertical_bias="0.664" />
 
     <Button
         android:id="@+id/goodButton"
